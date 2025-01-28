@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Type {
+  @@map("mac_type")
+  type_id        Int      @id @default(autoincrement())
+  type_name      String   @db.VarChar(60) @default("")
+  type_en        String   @db.VarChar(60) @default("")
+  type_sort      Int      @db.SmallInt @default(0)
+  type_mid       Int      @db.SmallInt @default(1)
+  type_pid       Int      @db.SmallInt @default(0)
+  type_status    Int      @db.TinyInt @default(1)
+  type_tpl       String   @db.VarChar(30) @default("")
+  type_tpl_list  String   @db.VarChar(30) @default("")
+  type_tpl_detail String  @db.VarChar(30) @default("")
+  type_tpl_play  String   @db.VarChar(30) @default("")
+  type_tpl_down  String   @db.VarChar(30) @default("")
+  type_key       String   @db.VarChar(255) @default("")
+  type_des       String   @db.VarChar(255) @default("")
+  type_title     String   @db.VarChar(255) @default("")
+  type_union     String   @db.VarChar(255) @default("")
+  type_extend    String   @db.Text
+  type_logo      String   @db.VarChar(255) @default("")
+  type_pic       String   @db.VarChar(255) @default("")
+  type_jumpurl   String   @db.VarChar(150) @default("")
+  vods          Vod[]    @relation("TypeToVod")
+}
+
+model User {
+  @@map("mac_user")
+  user_id         Int      @id @default(autoincrement())
+  group_id        Int      @db.SmallInt @default(0)
+  user_name       String   @db.VarChar(30) @default("")
+  user_pwd        String   @db.VarChar(32) @default("")
+  user_nick_name  String   @db.VarChar(30) @default("")
+  user_qq         String   @db.VarChar(16) @default("")
+  user_email      String   @db.VarChar(30) @default("")
+  user_phone      String   @db.VarChar(16) @default("")
+  user_status     Int      @db.TinyInt @default(0)
+  user_portrait   String   @db.VarChar(100) @default("")
+  user_portrait_thumb String @db.VarChar(100) @default("")
+  user_points     Int      @default(0)
+  user_reg_time   Int      @default(0)
+  user_login_time Int      @default(0)
+  user_login_ip   Int      @default(0)
+  user_login_num  Int      @db.SmallInt @default(0)
+  user_extend     Int      @db.SmallInt @default(0)
+  user_random     String   @db.VarChar(32) @default("")
+}
+
+model Vod {
+  @@map("mac_vod")
+  vod_id          Int      @id @default(autoincrement())
+  type_id         Int      @db.SmallInt @default(0)
+  type            Type     @relation("TypeToVod", fields: [type_id], references: [type_id])
+  vod_name        String   @db.VarChar(255) @default("")
+  vod_sub         String   @db.VarChar(255) @default("")
+  vod_en          String   @db.VarChar(255) @default("")
+  vod_status      Int      @db.TinyInt @default(0)
+  vod_letter      String   @db.Char(1) @default("")
+  vod_tag         String   @db.VarChar(100) @default("")
+  vod_pic         String   @db.VarChar(255) @default("")
+  vod_actor       String   @db.VarChar(255) @default("")
+  vod_director    String   @db.VarChar(255) @default("")
+  vod_blurb       String   @db.VarChar(255) @default("")
+  vod_remarks     String   @db.VarChar(100) @default("")
+  vod_area        String   @db.VarChar(20) @default("")
+  vod_lang        String   @db.VarChar(10) @default("")
+  vod_year        String   @db.VarChar(10) @default("")
+  vod_hits        Int      @db.MediumInt @default(0)
+  vod_hits_day    Int      @db.MediumInt @default(0)
+  vod_hits_week   Int      @db.MediumInt @default(0)
+  vod_hits_month  Int      @db.MediumInt @default(0)
+  vod_duration    String   @db.VarChar(10) @default("")
+  vod_up          Int      @db.MediumInt @default(0)
+  vod_down        Int      @db.MediumInt @default(0)
+  vod_score       Decimal  @db.Decimal(3,1) @default(0)
+  vod_time        Int      @default(0)
+  vod_time_add    Int      @default(0)
+  vod_content     String   @db.Text
+  vod_play_from   String   @db.VarChar(255) @default("")
+  vod_play_url    String   @db.Text @default("")
+}
